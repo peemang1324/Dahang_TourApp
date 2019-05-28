@@ -1,12 +1,15 @@
 package com.example.sns_project.info;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PostInfo implements Serializable { //PostAdapter에서 putExtra를 쓰기 위해
+public class PostInfo implements Serializable{ //PostAdapter에서 putExtra를 쓰기 위해
 
     private String title; //게시글 제목
     private ArrayList<String> contents; //내용
@@ -39,6 +42,8 @@ public class PostInfo implements Serializable { //PostAdapter에서 putExtra를 
 
         return docData;
     }
+
+
 
     //getter & setter
     public String getTitle() {

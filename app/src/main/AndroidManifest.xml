@@ -49,7 +49,7 @@
         <activity android:name=".activity.PostActivity"/>
         <activity android:name=".activity.ChattingActivity"/>
         <activity android:name=".activity.MessageActivity"/>
-
+        <activity android:name=".activity.GuideBoardActivity"/>
 
         <service android:name="Notifications.MyFirebaseldService"
             android:enabled="true"

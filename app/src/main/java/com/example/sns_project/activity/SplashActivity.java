@@ -11,8 +11,7 @@ public class SplashActivity extends BasicActivity {
 
     Handler handler = new Handler();
     Runnable runnable = () -> {
-        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        Intent intent = new Intent(SplashActivity.this, GuideBoardActivity.class);
         startActivity(intent);
         finish();
     };

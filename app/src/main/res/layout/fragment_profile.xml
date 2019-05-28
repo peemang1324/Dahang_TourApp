@@ -1,50 +1,264 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
-    tools:context="com.example.sns_project.fragment.ProfileFragment">
+    android:background="@drawable/sigunup_background">
 
-    <android.support.v7.widget.CardView
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <RelativeLayout
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/cv_profile_profileimg"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:padding="8dp"
-            android:layout_height="wrap_content">
+            android:layout_height="50dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/rounded"
+            android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="내 정보"
-                android:textColor="@color/colorPrimaryDark"
-                android:textStyle="bold"/>
+                android:id="@+id/tv_profile_name"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:layout_marginRight="20dp"
+                android:gravity="center"
+                android:text="name"
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:id="@+id/profile_image"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp"
-                android:src="@mipmap/ic_launcher"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/colorLightGray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal">
+
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="username"
-                android:layout_below="@id/profile_image"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="15dp"
-                android:textColor="@color/colorPrimaryDark"
-                android:textStyle="bold"
-                android:id="@+id/username"
-                android:textSize="18sp"
-                android:layout_marginBottom="20dp"/>
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:textColor="@color/black"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:background="#00ff0000"
+                android:gravity="left"
+                android:padding="10dp"
+                android:text="성별" />
 
-        </RelativeLayout>
+            <TextView
+                android:id="@+id/tv_profile_gender"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:textColor="@color/black"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="3"
+                android:background="#00ff0000"
+                android:gravity="left"
+                android:padding="10dp"
+                android:text="성별 정보" />
 
-    </android.support.v7.widget.CardView>
+        </LinearLayout>
 
-</RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/colorLightGray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+
+            android:orientation="horizontal">
+            <!--
+                        이거 Background해결
+                        -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:background="#00ff0000"
+                android:textColor="@color/black"
+                android:gravity="left"
+                android:padding="10dp"
+                android:text="전화번호" />
+
+            <TextView
+                android:id="@+id/tv_profile_phone_number"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:textColor="@color/black"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="3"
+                android:background="#00ff0000"
+                android:gravity="left"
+                android:padding="10dp"
+                android:text="전화번호 정보" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/colorLightGray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:textColor="@color/black"
+                android:layout_height="50dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:background="#00ff0000"
+                android:gravity="left"
+                android:padding="10dp"
+                android:text="생년월일" />
+
+            <TextView
+                android:id="@+id/tv_profile_birthday"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:textColor="@color/black"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="3"
+                android:background="#00ff0000"
+                android:gravity="left"
+                android:padding="10dp"
+                android:text="생년월일 정보" />
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/colorLightGray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:background="#00ff0000"
+                android:gravity="left"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:text="주소" />
+
+            <TextView
+                android:id="@+id/tv_profile_address"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:textColor="@color/black"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="3"
+                android:background="#00ff0000"
+                android:gravity="left"
+                android:padding="10dp"
+                android:text="주소 정보" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/colorLightGray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="25dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                android:src="@drawable/logout" />
+
+            <Button
+                android:id="@+id/bt_logout"
+                android:layout_width="150dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:text="로그아웃"
+                android:fontFamily="@font/nanumsquare_otfb"
+                android:textAllCaps="false"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:textColor="#ffffff"
+                android:textSize="14sp"
+                android:letterSpacing="-0.02"
+                android:background="@drawable/button_bg" />
+
+        </LinearLayout>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

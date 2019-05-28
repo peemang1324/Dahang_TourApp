@@ -3,6 +3,7 @@ package com.example.sns_project.activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +13,8 @@ import com.example.sns_project.R;
 import com.example.sns_project.adapter.PostAdapter;
 import com.example.sns_project.info.PostInfo;
 import com.example.sns_project.listener.OnPostListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -43,6 +46,32 @@ public class GuideBoardActivity extends BasicActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide_board);
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
+
+        if (firebaseUser == null) {
+            myStartActivity(SignUpActivity.class);
+        } else {
+            firebaseFirestore = FirebaseFirestore.getInstance();
+            DocumentReference documentReference = firebaseFirestore.collection("users").document(firebaseUser.getUid());
+            documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document != null) {
+                            if (document.exists()) {
+                            } else {
+                                myStartActivity(MemberInitActivity.class);
+                            }
+                        }
+                    } else {
+                    }
+                }
+            });
+        }
 
         postList = new ArrayList<>(); //게시물 리스트 초기화
         postAdapter = new PostAdapter(GuideBoardActivity.this, postList); //게시물 Adapter 초기화
@@ -103,8 +132,7 @@ public class GuideBoardActivity extends BasicActivity {
     View.OnClickListener onClickListener = v -> {
         switch (v.getId()) {
             case R.id.floatingActionButton:
-                //myStartActivity(WritePostActivity.class); //게시글 작성 화면으로 이동
-                myStartActivity(ChattingActivity.class);
+                myStartActivity(WritePostActivity.class); //게시글 작성 화면으로 이동
                 break;
         }
     };

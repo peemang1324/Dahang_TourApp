@@ -47,7 +47,7 @@ public class MemberInitActivity extends BasicActivity {
     private ImageView profileImageView; //프로필 이미지 넣기
     private String profilePath; //프로필 사진 경로를 저장할 변수
     User realtimeUserInfo; //realtimeDB에 저장할 user 객체
-
+    private  String userId =  user.getUid();
     private DatabaseReference mDatabase;// ...
     Uri downloadUri;
 
@@ -100,15 +100,30 @@ public class MemberInitActivity extends BasicActivity {
         }
     };
 
+    private String gender, tour;
     private void storageUploader() { //firebase storage 업로드 메소드
         /*각 텍스트창 입력 값을 가져옴*/
         final String name = ((EditText) findViewById(R.id.et_name)).getText().toString();
+        final String age = ((EditText) findViewById(R.id.et_age)).getText().toString();
         final String birthday = ((EditText) findViewById(R.id.et_birthday)).getText().toString();
         final String phone_number = ((EditText) findViewById(R.id.et_phone_number)).getText().toString();
         final String address = ((EditText) findViewById(R.id.et_address)).getText().toString();
 
+        RadioGroup genderGroup = (RadioGroup) findViewById(R.id.rg_gender);
+        RadioGroup tourGroup = (RadioGroup) findViewById(R.id.rg_tour);
 
-        if (name.length() > 0 && phone_number.length() > 9 && birthday.length() > 5 && address.length() > 0) {
+        int genderId = genderGroup.getCheckedRadioButtonId();
+        int tourId = tourGroup.getCheckedRadioButtonId();
+
+        RadioButton genderButton = (RadioButton) findViewById(genderId);
+        RadioButton tourButton = (RadioButton) findViewById(tourId);
+
+        gender = genderButton.toString().split("rb_")[1];
+        tour = tourButton.toString().split("rb_")[1];
+        gender = gender.substring(0, gender.length() - 1);
+        tour = tour.substring(0, tour.length() - 1);
+
+        if (name.length() > 0 && age.length() > 0 && phone_number.length() > 9 && birthday.length() > 5 && address.length() > 0) {
             loaderLayout.setVisibility(View.VISIBLE);
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageRef = storage.getReference();
@@ -116,7 +131,8 @@ public class MemberInitActivity extends BasicActivity {
             final StorageReference mountainImagesRef = storageRef.child("users/" + user.getUid() + "/profileImage.jpg");
 
             if (profilePath == null) { //프로필 이미지를 넣지 않았을 경우
-                MemberInfo memberInfo = new MemberInfo(name, phone_number, birthday, address);
+                MemberInfo memberInfo = new MemberInfo(name, age, gender, birthday, phone_number, address, tour);
+                realtimeUserInfo = new User(userId, name, "default", "offline", name.toLowerCase());
                 storeUploader(memberInfo); //firebase DB에 등록
             } else {
                 try {
@@ -130,7 +146,8 @@ public class MemberInitActivity extends BasicActivity {
                     }).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             downloadUri = task.getResult();
-                            MemberInfo memberInfo = new MemberInfo(name, phone_number, birthday, address, downloadUri.toString());
+                            MemberInfo memberInfo = new MemberInfo(name, age, gender, birthday, phone_number, address, tour, downloadUri.toString());
+                            realtimeUserInfo = new User(userId, name, "default", "offline", name.toLowerCase());
                             storeUploader(memberInfo);
                         } else {
                             showToast(MemberInitActivity.this, "회원 정보를 보내는데 실패하였습니다.");
@@ -153,18 +170,8 @@ public class MemberInitActivity extends BasicActivity {
 
                     /*User 정보 RealTime DB 등록 */
                     auth = FirebaseAuth.getInstance();
-                    FirebaseUser firebaseUser = auth.getCurrentUser();
-                    assert firebaseUser != null;
-                    String userId = firebaseUser.getUid();
-
+                    assert user != null;
                     mDatabase = FirebaseDatabase.getInstance().getReference();
-
-                    if(downloadUri != null){ //이미지를 넣었을 경우
-                        realtimeUserInfo = new User(userId, name, downloadUri.toString(), "offline", name.toLowerCase());
-                    }else{ //이미지를 넣지 않았을 경우
-                        realtimeUserInfo = new User(userId, name, "default", "offline", name.toLowerCase());
-                    }
-
                     mDatabase.child("Users").child(userId).setValue(realtimeUserInfo);
 
                     showToast(MemberInitActivity.this, "회원정보 등록을 성공하였습니다.");

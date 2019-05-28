@@ -3,41 +3,25 @@ package com.example.sns_project.activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
-import com.example.sns_project.fragment.ChatFragment;
+import com.example.sns_project.fragment.ChatsFragment;
 import com.example.sns_project.fragment.HomeFragment;
 import com.example.sns_project.fragment.ProfileFragment;
 import com.example.sns_project.fragment.UsersFragment;
-import com.example.sns_project.info.PostInfo;
 import com.example.sns_project.R;
-import com.example.sns_project.adapter.PostAdapter;
-import com.example.sns_project.listener.OnPostListener;
+import com.example.sns_project.info.PostInfo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.ArrayList;
-import java.util.Date;
-
-import static com.example.sns_project.Util.isStorageUrl;
 import static com.example.sns_project.Util.showToast;
-import static com.example.sns_project.Util.storageUrlToName;
 
 
 /*
@@ -105,13 +89,16 @@ public class MainActivity extends BasicActivity {
                     case R.id.nav_home:
                         selectedFragment = new HomeFragment();
                         break;
+                    case R.id.nav_bulletin_board:
+                        myStartActivity(WritePostActivity.class);
+                        break;
 
                     case R.id.nav_chat_users:
                         selectedFragment = new UsersFragment();
                         break;
 
                     case R.id.nav_chat:
-                        selectedFragment = new ChatFragment();
+                        selectedFragment = new ChatsFragment();
                         break;
 
                     case R.id.nav_profile:

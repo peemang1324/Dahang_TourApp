@@ -9,6 +9,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.sns_project.activity.WritePostActivity;
 import com.example.sns_project.info.PostInfo;
 import com.example.sns_project.R;
 import com.example.sns_project.activity.PostActivity;
@@ -141,22 +143,31 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         return mDataset.size();
     }
 
-    public void showPopup(View v, int position) { //게시물 우상단 팝업창 메소드(팝업 뷰, 게시물 id값)
+    private void showPopup(View v, final int position) {
         PopupMenu popup = new PopupMenu(activity, v);
-        popup.setOnMenuItemClickListener(menuItem -> {
-            switch (menuItem.getItemId()) {
-                case R.id.post_modify: //게시글 수정
-                    onPostListener.onModify(position); //수정 리스너
-                    return true;
-                case R.id.post_delete: //게시글 삭제
-                    onPostListener.onDelete(position); //삭제 리스너
-                    return true;
-                default:
-                    return false;
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.post_modify:
+                        onPostListener.onModify(position);
+                        return true;
+                    case R.id.post_delete:
+                        onPostListener.onDelete(position);
+                        return true;
+                    default:
+                        return false;
+                }
             }
         });
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.post, popup.getMenu());
         popup.show();
+    }
+
+    private void myStartActivity(Class c, PostInfo postInfo) {
+        Intent intent = new Intent(activity, c);
+        intent.putExtra("postInfo", postInfo);
+        activity.startActivity(intent);
     }
 }

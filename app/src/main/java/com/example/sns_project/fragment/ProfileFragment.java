@@ -13,19 +13,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.sns_project.activity.GalleryActivity;
+import com.example.sns_project.activity.LoginActivity;
 import com.example.sns_project.activity.PasswordReset;
+import com.example.sns_project.activity.SignUpActivity;
 import com.example.sns_project.activity.WritePostActivity;
 import com.example.sns_project.info.MemberInfo;
+import com.example.sns_project.info.PostInfo;
 import com.example.sns_project.info.User;
 import com.example.sns_project.R;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,14 +39,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ObjectStreamException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -56,8 +68,9 @@ public class ProfileFragment extends Fragment {
 
     private DatabaseReference reference;
     private FirebaseUser fuser;
-
     private StorageReference storageReference;
+
+    private FirebaseFirestore firebaseFirestore;
 
     private static final int IMAGE_REQUEST = 1;
     private Uri imageUri;
@@ -69,8 +82,15 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        image_profile = view.findViewById(R.id.profile_image);
-        username = view.findViewById(R.id.username);
+        TextView birthday = view.findViewById(R.id.tv_profile_birthday);
+        TextView address = view.findViewById(R.id.tv_profile_address);
+        TextView gender = view.findViewById(R.id.tv_profile_gender);
+        TextView phoneNumber = view.findViewById(R.id.tv_profile_phone_number);
+        image_profile = view.findViewById(R.id.cv_profile_profileimg);
+        username = view.findViewById(R.id.tv_profile_name);
+
+        view.findViewById(R.id.bt_logout).setOnClickListener(onClickListener);
+
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
@@ -97,11 +117,49 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        firebaseFirestore = FirebaseFirestore.getInstance(); //firestore 초기화(DataBase)
+        DocumentReference docRef = firebaseFirestore.collection("users").document(fuser.getUid());
+        docRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    String phoneNumStr = document.getData().get("phone_number").toString();
+                    String birthDayStr = document.getData().get("birthday").toString();
+
+                    birthday.setText(birthDayStr.substring(0,4) + "년 " + birthDayStr.substring(4,6) + "월 " + birthDayStr.substring(6,8) + "일");//게시글 제목
+                    address.setText(document.getData().get("address").toString());
+                    //phoneNumber.setText();
+                    phoneNumber.setText(phoneNumStr.substring(0,3) + "-" + phoneNumStr.substring(3,7) + "-" + phoneNumStr.substring(7,11));
+
+                    if(document.getData().get("gender").toString() == "male"){
+                        gender.setText("남성");
+                    }else{
+                        gender.setText("여성");
+                    }
+                } else {
+                    Log.d("abcd", "No such document");
+                }
+            } else {
+                Log.d("abcd", "get failed with ", task.getException());
+            }
+        });
         image_profile.setOnClickListener(v -> openImage());
 
         return view;
     }
 
+    View.OnClickListener onClickListener = v -> {
+        switch (v.getId()){
+            case R.id.bt_login:
+                logout();
+                break;
+        }
+    };
+
+    private void logout() {
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(intent);
+    }
     private void openImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -115,9 +173,6 @@ public class ProfileFragment extends Fragment {
         pd.show();
 
         if (imageUri != null){
-
-
-
 
             /*Storage 프로필 이미지 삭제*/
             StorageReference desertRef = storageReference.child("users/" + fuser.getUid() + "/profileImage.jpg"); //Firebase Storage 삭제 경로 설정
@@ -148,7 +203,7 @@ public class ProfileFragment extends Fragment {
                     /*firestore DB update*/
                     MemberInfo memberInfo = new MemberInfo(downloadUri.toString());
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    db.collection("users").document(fuser.getUid()).set(memberInfo)
+                    db.collection("users").document(fuser.getUid()).set(memberInfo, SetOptions.merge())
                             .addOnSuccessListener(aVoid ->{
                                 //Toast.makeText(getContext(), "프로필 사진을 수정했습니다.", Toast.LENGTH_SHORT).show();
                                     })
